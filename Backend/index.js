@@ -7,7 +7,8 @@ const port = 3000;
 app.get("/", (req, res) => {
 	res.send("hello world");
 });
-
+//applying express.json to all routes to acess req.body
+app.use(express.json());
 //.use creates a middleware for api/auth path
 //the middleware is written in routes folder
 app.use("/api/auth", require("./Routes/auth"));

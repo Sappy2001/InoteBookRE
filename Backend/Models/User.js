@@ -21,6 +21,6 @@ const UserSchema = new Schema({
 });
 const User = mongoose.model("user", UserSchema);
 //used for creating index to retrieve data fast
-//and  for creating custom index
+//creating custom index on email as its unique
 User.createIndexes();
 module.exports = User;

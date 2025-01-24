@@ -4,11 +4,12 @@ const router = express.Router();
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 var jwt = require("jsonwebtoken");
+const fetchUser = require("../MiddleWare/fetchUser");
 
 const JWT_Secret = "Sappy AllStar";
 //router hit endpoint /api/auth
 
-//Route:1 Creating user endpoint
+//Route:1 Create user with email&password endpoint
 router.post(
 	"/",
 	[
@@ -48,7 +49,7 @@ router.post(
 		}
 	}
 );
-// Route:2 Creating login endpoint
+// Route:2  /login endpoint
 router.post(
 	"/login",
 	[
@@ -79,4 +80,15 @@ router.post(
 	}
 );
 
-module.exports = router;
+// Route:3 get user Login details /getuser
+router.post("/getUser", fetchUser, async (req, res) => {
+	try {
+		const userId = req.user;
+		const user = await User.findById(userId).select("-password");
+		res.send({ user });
+	} catch (err) {
+		res.status(401).send("user not found");
+	}
+});
+
+module.exports = { router };

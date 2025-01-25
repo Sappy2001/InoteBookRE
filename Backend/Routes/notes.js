@@ -5,7 +5,7 @@ const { body, validationResult } = require("express-validator");
 const router = express.Router();
 
 //hit endpoint /api/notes
-//Route:1 get all user notes
+//Route:1 get all user notes (login required)
 router.get("/fetchAllNotes", fetchUser, async (req, res) => {
 	try {
 		const notes = await Notes.find({ user: req.user });
@@ -15,7 +15,7 @@ router.get("/fetchAllNotes", fetchUser, async (req, res) => {
 	}
 });
 
-//Route:2 create note for user
+//Route:2 create note for user (login required)
 router.post(
 	"/addNote",
 	fetchUser,
@@ -45,4 +45,53 @@ router.post(
 	}
 );
 
+//Route:3 to update excisting note (login required)
+router.put(
+	//:id is params for specific noteId
+	"/updateNote/:id",
+	fetchUser,
+	[
+		body("title").optional().isLength({ min: 3 }),
+		body("description").optional().isLength({ min: 5 }),
+	],
+	async (req, res) => {
+		const { title, description, tag } = req.body;
+		const newNote = {};
+		if (title) newNote.title = title;
+		if (description) newNote.description = description;
+		if (tag) newNote.tag = tag;
+		const noteId = req.params.id;
+		let note = await Notes.findById(noteId);
+		if (!note) {
+			return res.status(404).send("Note not found");
+		}
+		// find user and check its his note or not
+		if (note.user.toString() !== req.user) {
+			return res.status(401).send("Not Allowed");
+		}
+		note = await Notes.findByIdAndUpdate(
+			noteId,
+			{ $set: newNote },
+			{ new: true }
+		);
+		res.send({ note });
+	}
+);
+
+// Route:4 Delete an existing note (login required)
+router.delete("/deleteNote/:id", fetchUser, async (req, res) => {
+	try {
+		let note = await Notes.findById(req.params.id);
+		if (!note) {
+			return res.status(404).send("Note not found");
+		}
+		if (note.user.toString() !== req.user) {
+			return res.status(401).send("Not Allowed");
+		}
+		note = await Notes.findByIdAndDelete(req.params.id);
+		res.send({ Successs: "Note Has Been Deleted", note });
+	} catch (error) {
+		res.status(500).send({ error });
+	}
+});
 module.exports = router;

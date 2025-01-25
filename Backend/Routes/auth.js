@@ -80,7 +80,7 @@ router.post(
 	}
 );
 
-// Route:3 get user Login details /getuser
+// Route:3 get user Login details /getuser(login required)
 router.post("/getUser", fetchUser, async (req, res) => {
 	try {
 		const userId = req.user;

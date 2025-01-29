@@ -16,5 +16,5 @@ app.use("/api/auth", authRoutes);
 app.use("/api/notes", require("./Routes/notes"));
 
 app.listen(port, () => {
-	console.log("App listening to port:", port);
+	console.log("App listening to inoteBook Backend:", port);
 });

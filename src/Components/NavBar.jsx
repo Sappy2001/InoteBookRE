@@ -1,6 +1,11 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useEffect } from "react";
+import { NavLink, useLocation } from "react-router-dom";
 const NavBar = () => {
+	const location = useLocation();
+	useEffect(() => {
+		console.log(location.pathname + " From Navbar");
+	}, [location]);
+
 	return (
 		<>
 			<nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -22,12 +27,25 @@ const NavBar = () => {
 					<div className="collapse navbar-collapse" id="navbarSupportedContent">
 						<ul className="navbar-nav me-auto mb-2 mb-lg-0">
 							<li className="nav-item">
-								<NavLink className="nav-link active" aria-current="page" to="">
+								{/*making tag active when clicking*/}
+								<NavLink
+									className={`nav-link ${
+										location.pathname === "/" ? "active" : ""
+									}`}
+									aria-current="page"
+									to=""
+								>
 									Home
 								</NavLink>
 							</li>
 							<li className="nav-item">
-								<NavLink className="nav-link" to="/about">
+								{/*adding active dynamicallly by NavLink*/}
+								<NavLink
+									className={({ isActive }) =>
+										isActive ? "nav-link active" : "nav-link"
+									}
+									to="/about"
+								>
 									About
 								</NavLink>
 							</li>

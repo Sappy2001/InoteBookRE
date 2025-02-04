@@ -9,6 +9,8 @@ const router = express.Router();
 router.get("/fetchAllNotes", fetchUser, async (req, res) => {
 	try {
 		const notes = await Notes.find({ user: req.user });
+		const origin = req.headers.origin;
+		console.log(origin);
 		res.send({ notes });
 	} catch (error) {
 		res.status(401).send("enter proper credentials");

@@ -13,7 +13,7 @@ const fetchUser = (req, res, next) => {
 		req.user = data;
 		next();
 	} catch (error) {
-		res.status(401).send(JWT_Secret);
+		res.status(401).send("Error in credentials,fetchUser");
 	}
 };
 

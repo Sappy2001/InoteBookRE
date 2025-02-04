@@ -8,7 +8,10 @@ const NavBar = () => {
 
 	return (
 		<>
-			<nav className="navbar navbar-expand-lg bg-body-tertiary">
+			<nav
+				className="navbar navbar-expand-lg bg-body-tertiary"
+				data-bs-theme="dark"
+			>
 				<div className="container-fluid">
 					<NavLink className="navbar-brand" to="/">
 						InoteBook

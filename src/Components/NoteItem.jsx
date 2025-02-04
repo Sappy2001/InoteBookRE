@@ -1,18 +1,28 @@
-import React from "react";
+import React, { useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faPenToSquare,
 	faRectangleXmark,
 } from "@fortawesome/free-solid-svg-icons";
-const NoteItem = ({ note }) => {
+import NoteContext from "../Context/Notes/NoteContext";
+const NoteItem = ({ note, editNote }) => {
+	const context = useContext(NoteContext);
+
+	const { deleteNote } = context;
 	return (
 		<div className="col-md-3">
 			<div className="card m-3">
 				<div className="container d-flex justify-content-between w-100 my-2">
-					<button type="button" class="btn ">
+					<button
+						type="button"
+						className="btn"
+						onClick={() => {
+							deleteNote(note._id);
+						}}
+					>
 						<FontAwesomeIcon style={{ color: "red" }} icon={faRectangleXmark} />
 					</button>
-					<button type="button" class="btn  ">
+					<button type="button" className="btn" onClick={() => editNote(note)}>
 						<FontAwesomeIcon style={{ color: "blue" }} icon={faPenToSquare} />
 					</button>
 				</div>

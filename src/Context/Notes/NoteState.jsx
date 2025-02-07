@@ -90,6 +90,7 @@ const NoteState = (props) => {
 				newNotes[i].title = title;
 				newNotes[i].description = description;
 				newNotes[i].tag = tag;
+				break;
 			}
 		}
 		const json = await response.json();

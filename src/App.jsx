@@ -6,12 +6,23 @@ import NavBar from "./Components/NavBar";
 import NoteState from "./Context/Notes/NoteState";
 import Alert from "./Components/Alert";
 const App = () => {
+	const [alert, setAlert] = useState({ message: "", type: "" });
+	const showAlert = (message, type) => {
+		setAlert({
+			message,
+			type,
+		});
+		setTimeout(() => {
+			setAlert(null);
+		}, 1500);
+	};
+
 	return (
 		<>
 			<NoteState>
 				<NavBar />
-				<Alert message={"Hello this is alerts"} />
-				<Outlet />
+				<Alert alert={alert} />
+				<Outlet context={{ showAlert }} />
 			</NoteState>
 		</>
 	);

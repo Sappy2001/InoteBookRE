@@ -2,10 +2,12 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import NoteContext from "../Context/Notes/NoteContext";
 import NoteItem from "./NoteItem";
 import AddNote from "./AddNote";
+import { useOutletContext } from "react-router-dom";
 
 const Notes = () => {
 	const context = useContext(NoteContext);
 	const { notes, fetchAllNotes, editNote: contextEditNote } = context;
+	const { showAlert } = useOutletContext();
 	const [currentNoteId, setCurrentNoteId] = useState("");
 	const [noteData, setNoteData] = useState("");
 	const [isNoteSaved, setIsNoteSaved] = useState(false);
@@ -14,7 +16,8 @@ const Notes = () => {
 		fetchAllNotes();
 		if (isNoteSaved) {
 			// Run your logic here after saveNote is performed
-			console.log("Note was saved successfully!");
+			console.log("Note was updated successfully!");
+
 			// Reset the state to avoid infinite loop
 			setIsNoteSaved(false);
 		}
@@ -32,13 +35,19 @@ const Notes = () => {
 	};
 	const saveNote = async () => {
 		const { title, description, tag } = noteData;
-		await contextEditNote(currentNoteId, title, description, tag);
-		setIsNoteSaved(true);
+		try {
+			await contextEditNote(currentNoteId, title, description, tag);
+			setIsNoteSaved(true);
+			showAlert("Note updated Successfully", "primary");
+		} catch (error) {
+			showAlert(error.message, "primary");
+		}
 	};
 
 	return (
 		<div className="row my-2 d-f">
-			<h2>Your Notes</h2>
+			{notes?.length === 0 ? <h2>No Notes to Display</h2> : <h2>Your Notes</h2>}
+
 			<button
 				type="button"
 				className="invisible"
@@ -83,6 +92,10 @@ const Notes = () => {
 								data-bs-dismiss="modal"
 								aria-label="Close"
 								onClick={saveNote}
+								disabled={
+									noteData?.title?.length <= 3 ||
+									noteData?.description?.length <= 5
+								}
 							>
 								Update Note
 							</button>
@@ -90,6 +103,7 @@ const Notes = () => {
 					</div>
 				</div>
 			</div>
+
 			{notes?.map((item, i) => {
 				return <NoteItem key={i} note={item} editNote={editNote} />;
 			})}

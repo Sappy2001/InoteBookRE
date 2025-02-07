@@ -95,6 +95,23 @@ const NavBar = () => {
 								Search
 							</button>
 						</form>
+
+						<div className="mx-2  d-flex justify-content-between">
+							<NavLink
+								className="btn btn-secondary mx-2 "
+								to="/login"
+								role="button"
+							>
+								Login
+							</NavLink>
+							<NavLink
+								className="btn btn-secondary  "
+								to="/signup"
+								role="button"
+							>
+								Signup
+							</NavLink>
+						</div>
 					</div>
 				</div>
 			</nav>

@@ -9,7 +9,7 @@ const fetchUser = require("../MiddleWare/fetchUser");
 const JWT_Secret = "Sappy AllStar";
 //router hit endpoint /api/auth
 
-//Route:1 Create user with email&password endpoint
+//Route:1 Create user with email&password endpoint(SIGNUP)
 router.post(
 	"/",
 	[

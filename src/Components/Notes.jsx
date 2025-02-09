@@ -2,18 +2,28 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import NoteContext from "../Context/Notes/NoteContext";
 import NoteItem from "./NoteItem";
 import AddNote from "./AddNote";
-import { useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 
 const Notes = () => {
+	const navigate = useNavigate();
 	const context = useContext(NoteContext);
-	const { notes, fetchAllNotes, editNote: contextEditNote } = context;
+	const {
+		notes,
+		fetchAllNotes,
+		editNote: contextEditNote,
+		setAuthToken,
+		authToken,
+	} = context;
 	const { showAlert } = useOutletContext();
 	const [currentNoteId, setCurrentNoteId] = useState("");
 	const [noteData, setNoteData] = useState("");
 	const [isNoteSaved, setIsNoteSaved] = useState(false);
 
 	useEffect(() => {
-		fetchAllNotes();
+		if (localStorage.getItem("token")) {
+			setAuthToken(localStorage.getItem("token"));
+			fetchAllNotes();
+		} else navigate("/login");
 		if (isNoteSaved) {
 			// Run your logic here after saveNote is performed
 			console.log("Note was updated successfully!");
@@ -21,7 +31,7 @@ const Notes = () => {
 			// Reset the state to avoid infinite loop
 			setIsNoteSaved(false);
 		}
-	}, [isNoteSaved]);
+	}, [isNoteSaved, authToken]);
 
 	const modalRef = useRef(null);
 	const editNote = (note) => {

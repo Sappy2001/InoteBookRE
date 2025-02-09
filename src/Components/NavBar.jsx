@@ -1,11 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
+import NoteContext from "../Context/Notes/NoteContext";
 const NavBar = () => {
 	const location = useLocation();
 	useEffect(() => {
 		console.log(location.pathname + " From Navbar");
 	}, [location]);
-
+	const context = useContext(NoteContext);
+	const { authToken, setAuthToken } = context;
 	return (
 		<>
 			<nav
@@ -97,20 +99,37 @@ const NavBar = () => {
 						</form>
 
 						<div className="mx-2  d-flex justify-content-between">
-							<NavLink
-								className="btn btn-secondary mx-2 "
-								to="/login"
-								role="button"
-							>
-								Login
-							</NavLink>
-							<NavLink
-								className="btn btn-secondary  "
-								to="/signup"
-								role="button"
-							>
-								Signup
-							</NavLink>
+							{!authToken ? (
+								<>
+									<NavLink
+										className="btn btn-secondary mx-2 "
+										to="/login"
+										role="button"
+									>
+										Login
+									</NavLink>
+									<NavLink
+										className="btn btn-secondary  "
+										to="/signup"
+										role="button"
+									>
+										Signup
+									</NavLink>
+								</>
+							) : (
+								<>
+									<NavLink
+										className="btn btn-secondary  "
+										role="button"
+										onClick={() => {
+											localStorage.removeItem("token");
+											setAuthToken("");
+										}}
+									>
+										Logout
+									</NavLink>
+								</>
+							)}
 						</div>
 					</div>
 				</div>

@@ -1,19 +1,20 @@
+import { useNavigate } from "react-router-dom";
 import NoteContext from "./NoteContext";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const NoteState = (props) => {
 	const host = "http://localhost:5000";
 
 	const [notes, setNotes] = useState();
+	const [authToken, setAuthToken] = useState("");
 
 	const fetchAllNotes = async () => {
 		const response = await fetch(`${host}/api/notes/fetchAllNotes`, {
 			method: "GET",
 			headers: {
 				"content-type": "application/json",
-				"auth-token":
-					"eyJhbGciOiJIUzI1NiJ9.Njc5MWU4NmVmYjg2YWJmNWQ0ZDI1OGIx.YTV1jG5AXpIPZLNM0NaoVLFxR8rCpNJLfQnclsiizlk",
+				"auth-token": authToken,
 			},
 		});
 		const json = await response.json();
@@ -29,8 +30,7 @@ const NoteState = (props) => {
 			method: "POST",
 			headers: {
 				"content-type": "application/json",
-				"auth-token":
-					"eyJhbGciOiJIUzI1NiJ9.Njc5MWU4NmVmYjg2YWJmNWQ0ZDI1OGIx.YTV1jG5AXpIPZLNM0NaoVLFxR8rCpNJLfQnclsiizlk",
+				"auth-token": authToken,
 			},
 			body: JSON.stringify({ title, description, tag }),
 		});
@@ -58,8 +58,7 @@ const NoteState = (props) => {
 			method: "DELETE",
 			headers: {
 				"content-type": "application/json",
-				"auth-token":
-					"eyJhbGciOiJIUzI1NiJ9.Njc5MWU4NmVmYjg2YWJmNWQ0ZDI1OGIx.YTV1jG5AXpIPZLNM0NaoVLFxR8rCpNJLfQnclsiizlk",
+				"auth-token": authToken,
 			},
 		});
 		const json = await response.json();
@@ -77,8 +76,7 @@ const NoteState = (props) => {
 			method: "PUT",
 			headers: {
 				"content-type": "application/json",
-				"auth-token":
-					"eyJhbGciOiJIUzI1NiJ9.Njc5MWU4NmVmYjg2YWJmNWQ0ZDI1OGIx.YTV1jG5AXpIPZLNM0NaoVLFxR8rCpNJLfQnclsiizlk",
+				"auth-token": authToken,
 			},
 			body: JSON.stringify({ title, description, tag }),
 		});
@@ -100,7 +98,16 @@ const NoteState = (props) => {
 
 	return (
 		<NoteContext.Provider
-			value={{ notes, setNotes, addNote, deleteNote, editNote, fetchAllNotes }}
+			value={{
+				notes,
+				setNotes,
+				addNote,
+				deleteNote,
+				editNote,
+				fetchAllNotes,
+				setAuthToken,
+				authToken,
+			}}
 		>
 			{props.children}
 		</NoteContext.Provider>

@@ -24,8 +24,7 @@ const Signup = () => {
 		});
 		const json = await response.json();
 		if (json?.length > 5) {
-			localStorage.removeItem("token");
-			localStorage.setItem("token", json.authToken);
+			localStorage.setItem("token", json);
 			navigate("/");
 		} else console.log("Invalid Credentials");
 	};
